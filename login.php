@@ -15,6 +15,10 @@
       <td> </td>
       <td><input name="Submit" type="submit" value="Login" class="Button3"></td>
     </tr>
+         <tr>
+      <td> </td>
+      <td><input name="Get" type="submit" value="return" class="Button3"></td>
+    </tr>
   </table>
 </form>
 
@@ -22,38 +26,47 @@
      require_once __DIR__ . '/vendor/autoload.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-//$connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
 
 if(isset($_POST['Submit'])){
-    /*$channel = $connection->channel();
-    $channel->queue_declare('userData', false, false, false, false);
+    send();    
+}
+
+if(isset($_POST['Get'])){
+    receive();
+}
+
+function send(){
+    $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
+    $channel = $connection->channel();
+    $channel->queue_declare('hello', false, false, false, false);
     $password = $_POST['Password'];
     $username = $_POST['Username'];
     $message = 'LOGIN,'. $username .','. $password;
     echo "$message";
     $msg = new AMQPMessage($message);
-    $channel->basic_publish($msg, '', 'messages');
+    $channel->basic_publish($msg, '', 'hello');
     echo " [x] Sent 'Hello World!'\n";
-    $channel->close();
-    /**/
-    echo "entered";
-    $connection2 = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
-    echo "1";
-    $channelR-> $connection2->channel();
-    echo "2";
-    $channelR->queue_declare('return', false, false, false, false);
-    echo ' [*] Waiting for messages. To exit press CTRL+C', "\n";
-    $callback = function($msgR) {
-        echo " [x] Received ", $msgR->body, "\n";
-    };
-    $channelR->basic_consume('return', '', false, true, false, false, $callback);
-    while(count($channelR->callbacks)) {
-        $channelR->wait();
-        echo "waiting";
-    }
-    $channelR->close();
-    $connection2->close();
-
+    $channel->close();    
 }
 
+function receive(){
+    $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
+    $channel = $connection->channel();
+    $channel->queue_declare('msg', false, false, false, false);
+    echo ' [*] Waiting for messages. To exit press CTRL+C', "\n";
+    $callback = function($msg) {
+        //echo " [x] Received ", $msg->body, "\n";
+        if($msg->body == 'OK'){
+            header("Location:chargeUser.php");
+        }else{
+            echo "fallo de autenticacion";
+        }
+        exit;
+    };
+    $channel->basic_consume('msg', '', false, true, false, false, $callback);
+    while(count($channel->callbacks)) {
+        $channel->wait();
+        }
+    $connection->close();
+}
 ?>
