@@ -28,6 +28,7 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 if(isset($_POST['Submit'])){
+    echo "pressed";
     send();    
 }
 
@@ -55,10 +56,13 @@ function receive(){
     $channel->queue_declare('msg', false, false, false, false);
     echo ' [*] Waiting for messages. To exit press CTRL+C', "\n";
     $callback = function($msg) {
-        //echo " [x] Received ", $msg->body, "\n";
-        if($msg->body == 'OK'){
+        if($msg->body == 'ADMIN'){
             header("Location:chargeUser.php");
-        }else{
+        }
+        if($msg->body == 'USER'){
+            header("Location:chargeLayer.php");
+        }
+        else{
             echo "fallo de autenticacion";
         }
         exit;
