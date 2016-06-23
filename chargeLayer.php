@@ -13,6 +13,10 @@
       <td> </td>
       <td><input name="Submit" type="submit" value="Cargar" class="Button3"></td>
     </tr>
+     <td align="center" valign="top">Graficar arbol de capas</td>
+      <td><input name="Graph" type="submit" value="Graficar" class="Button3"></td>
+     <td align="center" valign="top">Eliminar Capa</td>
+     <td><input name="Delete" type="submit" value="Ir a Eliminar" class="Button3"></td>
   </table>
 </form>
 <?php
@@ -22,7 +26,29 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 if(isset($_POST['Submit'])){
-    sendFile();    
+    sendFile();
+
+}
+
+if(isset($_POST['Delete'])){
+    header("Location:deleteLayer.php");
+}
+
+if(isset($_POST['Graph'])){
+    send();
+    header("Location:showTreeGraph.html");
+}
+
+function send(){
+    $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
+    $channel = $connection->channel();
+    $channel->queue_declare('hello', false, false, false, false);
+    $message = 'TGRAPH';
+    echo "$message";
+    $msg = new AMQPMessage($message);
+    $channel->basic_publish($msg, '', 'hello');
+    echo " [x] Sent 'GRAPH'\n";
+    $channel->close();    
 }
 
      

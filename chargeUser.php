@@ -16,6 +16,14 @@
      <td><input name="Graph" type="submit" value="Graficar" class="Button3"></td>
      <td><input name="Show" type="submit" value="Mostrar Grafica" class="Button3"></td>
     </tr>
+     <tr>
+     <td colspan="2" align="left" valign="top"><h3>Eliminar Usuarios</h3></td>
+     <td><input name="Delete" type="submit" value="Eliminar" class="Button3"></td>
+     </tr>
+     <td colspan="2" align="left" valign="top"><h3>Agregar Usuarios</h3></td>
+     <td><input name="newUser" type="text" class="Input"></td>
+     <td><input name="newPass" type="text" class="Input"></td>
+     <td><input name="Add" type="submit" value="Agregar" class="Button3"></td>
   </table>
 </form>
      
@@ -33,7 +41,7 @@ if(isset($_POST['Graph'])){
 }
 
 if(isset($_POST['Show'])){
-    receive();
+    showImage();
 }
 
 function showImage(){
@@ -85,6 +93,7 @@ function receive(){
         }else{
             echo "fallo de autenticacion";
         }
+        $connection->close();
         exit;
     };
     $channel->basic_consume('msg', '', false, true, false, false, $callback);

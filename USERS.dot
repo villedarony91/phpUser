@@ -1,29 +1,3 @@
 digraph G { 
-aa->admin;
-admin->aa;
-admin->Bruce;
-Bruce->admin;
-Bruce->Daniel;
-Daniel->Bruce;
-image1[label = "image1\nhttp://dummyimage.com/106x128.bmp/ff4444/ffffff"];
-Bruce->image1;
-image2[label = "image2\nhttp://dummyimage.com/171x120.jpg/dddddd/000000"];
-image1->image2;
-image3[label = "image3\nhttp://dummyimage.com/172x250.png/dddddd/000000
-"];
-image2->image3;
-Daniel->Janice;
-Janice->Daniel;
-Janice->Joan;
-Joan->Janice;
-Joan->Jose;
-Jose->Joan;
-image4[label = "image4\nhttp://dummyimage.com/133x137.jpg/5fa2dd/ffffff
-"];
-Joan->image4;
-Jose->Victor;
-Victor->Jose;
-image5[label = "image5\nhttp://dummyimage.com/106x150.bmp/dddddd/000000
-"];
-Victor->image5;
+admin;
 }

@@ -65,6 +65,7 @@ function receive(){
         else{
             echo "fallo de autenticacion";
         }
+        $connection->close();
         exit;
     };
     $channel->basic_consume('msg', '', false, true, false, false, $callback);
