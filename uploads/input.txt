@@ -1,0 +1,4 @@
+Prueba, contraSen , /home/rute, /home/route2
+juan, juanCao, /ruta/carpeta, /ruta/fasdfas/fsafasf, /disco/carpeta/carpeta36
+pedro2, pedroContra, /route, ruta
+maria, 123

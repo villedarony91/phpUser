@@ -24,18 +24,63 @@
      <td><input name="newUser" type="text" class="Input"></td>
      <td><input name="newPass" type="text" class="Input"></td>
      <td><input name="Add" type="submit" value="Agregar" class="Button3"></td>
+     <tr>
+     <td colspan="2" align="left" valign="top"><h3>Modificar Usuarios</h3></td>
+     <td><input name="Modify" type="submit" value="Modificar" class="Button3"></td>
+     </tr>
   </table>
+     </form>
+<form enctype="multipart/form-data" action="chargeUser.php" method="POST">
+     SUBIR ARCHIVO: <input name="fichero_usuario" type="file" />
+    <input type="submit" value="Enviar fichero" name="send" />
 </form>
-     
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-include('gv.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-if(isset($_POST['Submit'])){
-    sendFile();
+if(isset($_POST['Delete'])){
+    header("Location: deleteUser.php");
 }
+
+if(isset($_POST['Modify'])){
+    header("Location: modUser.php");
+}
+
+if(isset($_POST['Submit'])){
+    sendFile($_POST['Path']);
+}
+
+
+if(isset($_POST['send'])){
+    $dir_subida = '/var/www/html/uploads/';
+    $fichero_subido = $dir_subida . basename($_FILES['fichero_usuario']['name']);
+    echo $fichero_subido;
+    if (move_uploaded_file($_FILES['fichero_usuario']['tmp_name'], $fichero_subido)) {
+        echo "El fichero es válido y se subió con éxito.\n";
+    } else {
+        echo "¡Posible ataque de subida de ficheros!\n";
+        echo '<pre>';
+        print_r($_FILES);
+        print "</pre>";
+    }
+
+}
+
+if(isset($_POST['Add'])){
+    $newUser = $_POST['newUser'];
+    $newPassw = $_POST['newPass'];
+    $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
+    $channel = $connection->channel();
+    $channel->queue_declare('hello', false, false, false, false);
+    $message = 'NEWUSR,' . $newUser . ',' . $newPassw;
+    echo "$message";
+    $msg = new AMQPMessage($message);
+    $channel->basic_publish($msg, '', 'hello');
+    $channel->close();
+}
+
+
 if(isset($_POST['Graph'])){
     send();    
 }
@@ -48,12 +93,12 @@ function showImage(){
     header("Location:showGraph.html");
 }
 
-function sendFile(){
+function sendFile($FILE_NAME){
     $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
     $channel = $connection->channel();
     $channel->queue_declare('hello', false, false, false, false);
     $allFile = "UFILE,";
-    $handle = fopen("/home/rlopez/massInput.txt", "r");
+    $handle = fopen($FILE_NAME, "r");
     if ($handle) {
         while (($line = fgets($handle)) !== false) {
             $allFile .= $line . ',*,';
@@ -78,8 +123,7 @@ function send(){
     echo "$message";
     $msg = new AMQPMessage($message);
     $channel->basic_publish($msg, '', 'hello');
-    echo " [x] Sent 'GRAPH'\n";
-    $channel->close();    
+    $channel->close();
 }
 
 function receive(){

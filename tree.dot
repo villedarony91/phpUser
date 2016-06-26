@@ -1,12 +1,10 @@
 digraph G {
 node [shape = record, height=.1];
-s[label = "<izq> |s|<der> ";]
-p[label = "<izq> |p|<der> ";]
-e[label = "<izq> |e|<der> ";]
-u[label = "<izq> |u|<der> ";]
-t[label = "<izq> |t|<der> ";]
-"s":izq->p;
-"p":izq->e;
-"s":der->u;
-"u":izq->t;
+prueba[label = "<izq> |prueba|<der> ";]
+[label = "<izq> ||<der> ";]
+pot[label = "<izq> |pot|<der> ";]
+baloon[label = "<izq> |baloon|<der> ";]
+"prueba":izq->;
+"":der->pot;
+"pot":izq->baloon;
 }

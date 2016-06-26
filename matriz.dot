@@ -1,0 +1,63 @@
+digraph G { 
+
+{ rank = same;ort;Y0;Y1;Y6;Y7;Y8;}ort->X0;
+ort->Y0;
+
+nodo0[label = "#A5BF1A"];
+{rank = same;X0;nodo0}
+X0->nodo0;
+nodo0->Y0;
+nodo0->X0;
+nodo0->Y0;
+
+nodo1[label = "#B1C11B"];
+{rank = same;X1;nodo1}
+X1->nodo1;
+nodo1->Y7;
+nodo1->X1;
+nodo1->Y7;
+
+nodo2[label = "#DA391B"];
+{rank = same;X2;nodo2}
+X2->nodo2;
+nodo2->Y1;
+nodo2->X2;
+nodo2->Y1;
+
+nodo3[label = "#39BC1A"];
+{rank = same;X3;nodo3}
+X3->nodo3;
+nodo3->Y8;
+nodo3->X3;
+nodo3->Y8;
+subgraph cluster1{
+Y0->Y1;
+Y1->Y0;
+Y1->Y6;
+Y6->Y1;
+Y6->Y7;
+Y7->Y6;
+Y7->Y8;
+Y8->Y7;
+}
+
+X0->X1;
+X1->X0;
+X1->X2;
+X2->X1;
+X2->X3;
+X3->X2;
+X3->X4;
+X4->X3;
+X4->X5;
+X5->X4;
+X5->X6;
+X6->X5;
+X6->X7;
+X7->X6;
+X7->X8;
+X8->X7;
+X8->X9;
+X9->X8;
+
+}

@@ -17,18 +17,43 @@
       <td><input name="Graph" type="submit" value="Graficar" class="Button3"></td>
      <td align="center" valign="top">Eliminar Capa</td>
      <td><input name="Delete" type="submit" value="Ir a Eliminar" class="Button3"></td>
+     <tr>
+      <td align="center" valign="top">Graficar Matriz capa</td>
+     <td><input name="matGraph" type="submit" value="Ir a graficar" class="Button3"></td>
+     </tr>
   </table>
+</form>
+     <form enctype="multipart/form-data" action="chargeLayer.php" method="POST">
+     SUBIR ARCHIVO: <input name="fichero_usuario" type="file" />
+    <input type="submit" value="Enviar fichero" name="send" />
 </form>
 <?php
      require_once __DIR__ . '/vendor/autoload.php';
-include('gv.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-if(isset($_POST['Submit'])){
-    sendFile();
-
+if(isset($_POST['matGraph'])){
+    header("Location:matGraph.php");
 }
+
+
+if(isset($_POST['Submit'])){
+    sendFile($_POST['Path']);
+}
+
+if(isset($_POST['send'])){
+    $dir_subida = '/var/www/html/uploads/';
+    $fichero_subido = $dir_subida . basename($_FILES['fichero_usuario']['name']);
+    echo $fichero_subido;
+    if (move_uploaded_file($_FILES['fichero_usuario']['tmp_name'], $fichero_subido)) {
+        echo "El fichero es válido y se subió con éxito.\n";
+    } else {
+        echo '<pre>';
+        print_r($_FILES);
+        print "</pre>";
+    }
+}
+
 
 if(isset($_POST['Delete'])){
     header("Location:deleteLayer.php");
@@ -52,13 +77,13 @@ function send(){
 }
 
      
-function sendFile(){
+function sendFile($FILE_NAME){
     $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
     $channel = $connection->channel();
     $channel->queue_declare('hello', false, false, false, false);
     $layerName = $_POST['LayerName'];
     $allFile = 'LFILE,' . $layerName . ',' ;
-    $handle = fopen("/home/rlopez/orto.txt", "r");
+    $handle = fopen($FILE_NAME, "r");
     if ($handle) {
         while (($line = fgets($handle)) !== false) {
             $allFile .= $line;

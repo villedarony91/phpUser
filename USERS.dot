@@ -1,3 +1,24 @@
 digraph G { 
-admin;
+admin->juan35468;
+juan35468->admin;
+juan35468->maria2;
+maria2->juan35468;
+image3[label = "image3\n/ruta/carpeta"];
+juan35468->image3;
+image4[label = "image4\n/ruta/fasdfas/fsafasf"];
+image3->image4;
+image5[label = "image5\n/disco/carpeta/carpeta36"];
+image4->image5;
+maria2->pedro2;
+pedro2->maria2;
+pedro2->Prueba;
+Prueba->pedro2;
+image6[label = "image6\n/route"];
+pedro2->image6;
+image7[label = "image7\nruta"];
+image6->image7;
+image1[label = "image1\n/home/rute"];
+Prueba->image1;
+image2[label = "image2\n/home/route2"];
+image1->image2;
 }
